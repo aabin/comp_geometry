@@ -1,0 +1,14 @@
+To Do
+=====
+
+- test more point sets
+
+- improve function documentation headers (input, output, assumptions, etc.)
+
+- introduce file input/output for input points and output edges found
+
+- add Python front end to graphically select input points, graphically display them,
+  call slow_convex_hull with points, read in convex hull edges, graphrically display them
+
+
+
