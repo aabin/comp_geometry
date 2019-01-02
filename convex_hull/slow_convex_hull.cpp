@@ -5,6 +5,8 @@
 //
 //      Finds the convex hull for a set of 2D points
 //
+//          ./slow_convex_hull input_filename output_filename
+//
 //      ( slow naive version from:                               )
 //      (                                                        )
 //      (           Computational Geometry, 3rd edition          )
@@ -15,8 +17,11 @@
 //
 // Change Log:
 //
-//    1/1/19 (pf)  - created
+//    1/1/19   (pf)  - created
 //
+//    1/2/19   (pf)  - added read_in_points() to read in points from a file 
+//                   - added use of PointSet class to store info read in from
+//                     file
 //
 // (pf) Patrick Flynn
 //
@@ -24,6 +29,8 @@
 
 // standard includes
 #include <iostream>
+#include <fstream>
+#include <string>
 
 // custom includes
 #include "comp_geo.h"
@@ -37,24 +44,33 @@ const Output_level OUTPUT_LEVEL = HIGHEST;
 
 // ====================================================================
 
-// Creates points (for testing)
+// Reads in input points from a file
 
-void init_points(Point points[], int num_points)
-{
-    points[0].x =  0.0;
-    points[0].y =  0.0;
+PointSet read_in_points(char *inputfile)
+{    
+    PointSet pset;
+    int num_points = 0;;
+    double px = -1.0;
+    double py = -1.0;
 
-    points[1].x =  0.0;
-    points[1].y = 10.0;
+    ifstream point_file(inputfile);
+    if (point_file.is_open())
+    {
+        point_file >> num_points;
+        pset.num_points = num_points;
+        pset.points = new Point[num_points];
+        
+        for (int k = 0; k < num_points; k++) {
+            point_file >> px >> py;
+            pset.points[k].x = px;
+            pset.points[k].y = py;
+        }
+        
+        point_file.close();
+ 
+    } else cout << "Unable to open file"; 
 
-    points[2].x = 10.0;
-    points[2].y = 10.0;
-
-    points[3].x = 10.0;
-    points[3].y =  0.0;
-
-    points[4].x =  5.0;
-    points[4].y =  5.0;    
+  return pset;
 }
 
 // ---------------------------------------------------------------------
@@ -174,13 +190,15 @@ int convex_hull(Point points[], int num_points, Edge edges[], int num_edges)
 
 // ====================================================================
 
-int main()
+int main(int argc, char* argv[])
 {
-    // points to find convex hull of
-    Point *points = NULL;
-    int num_points = 5;
-    points = new Point[num_points];
-    init_points(points, num_points);
+    char *inputfile  = argv[1];
+    char *outputfile = argv[2];
+    
+    PointSet pset = read_in_points(inputfile);
+    
+    Point *points =  pset.points;
+    int num_points = pset.num_points;
     
     if (OUTPUT_LEVEL > NORMAL) print_points(points, num_points);
 
