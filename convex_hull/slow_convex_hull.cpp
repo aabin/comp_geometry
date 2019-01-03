@@ -5,7 +5,7 @@
 //
 //      Finds the convex hull for a set of 2D points
 //
-//          ./slow_convex_hull input_filename output_filename
+//      EXECUTE: ./slow_convex_hull input_points_filename output_hull_filename
 //
 //      ( slow naive version from:                               )
 //      (                                                        )
